@@ -14,5 +14,7 @@ int main(int argc, char** argv)
         
         solver->set_problem(problem);
         
+        solver->solve();
+        
         return 0;
 } 

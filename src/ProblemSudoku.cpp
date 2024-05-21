@@ -1,9 +1,14 @@
 #include "ProblemSudoku.h"
 #include <iostream>
 
+#define RED "\e[0;31m"
+#define GRN "\e[0;00m"
+
+
+
 ProblemSudoku::ProblemSudoku()
 {
-    dim_ = 100;
+    dim_ = 81;
     feasible_values_.resize(dim_);
     for (int i=0;i<dim_;i++)
         feasible_values_[i] = get_vector_from_to(1,9);
@@ -40,7 +45,40 @@ ProblemSudoku::ProblemSudoku()
     set_initial(8,7,7);
     set_initial(8,8,9);    
 
-    show();
+    AbstractProblem::show();
+    
+    std::vector<int> values = get_vector_from_to(1,9);
+    
+    std::vector<unsigned int> indexes(9);
+    // for each line    
+    for (int i=0;i<9;i++)   
+    {
+        for (int j=0;j<9;j++)
+        {
+            indexes[j] = convert_index(i,j);
+        }
+        constraints_.push_back( new ConstraintAllInside(values,indexes));
+    }
+    // for each colonne    
+    for (int i=0;i<9;i++)   
+    {
+        for (int j=0;j<9;j++)
+        {
+            indexes[j] = convert_index(j,i);
+        }
+        constraints_.push_back( new ConstraintAllInside(values,indexes));
+    }
+    
+    // for each box
+    for (int ii=0;ii<3;ii++)    for (int jj=0;jj<3;jj++)    
+    {
+        unsigned int cpt = 0;
+        for (int i=0;i<3;i++)   for (int j=0;j<3;j++)
+        {
+            indexes[cpt++] = convert_index(3*ii+i,3*jj+j);
+        }
+        constraints_.push_back( new ConstraintAllInside(values,indexes));
+    }
 }
 
 
@@ -48,7 +86,7 @@ ProblemSudoku::ProblemSudoku()
 unsigned int ProblemSudoku::convert_index(  unsigned int row,
                                             unsigned int col)
 {
-    return row*10+col;
+    return row*9+col;
 }
 
 
@@ -62,19 +100,32 @@ void ProblemSudoku::set_initial ( unsigned int row,
     feasible_values_[index].push_back(value);
 }
 
-void ProblemSudoku::show()
-{
-    for (int i=0;i<10;i++)  
+void ProblemSudoku::show(const std::vector< std::vector< int> >& value)
+{   
+    for (int i=0;i<9;i++)  
     {
-        for (int j=0;j<10;j++)
+        for (int k=0;k<3;k++)
         {
-            unsigned int index = convert_index(i,j);
-            std::vector<int> c = feasible_values_[index];
-            
-            if(c.size()==1)
-                std::cout<<c[0];
-            else 
+            for (int j=0;j<9;j++)
+            {
+                unsigned int index = convert_index(i,j);
+                std::vector<int> c = value[index];
+                for (int kk=0;kk<3;kk++)
+                {
+                    int v = k*3+kk+1;
+                    bool is_in = false;
+                    for (int p=0;p<c.size();p++)
+                        if ( c[p] == v)
+                            is_in = true;
+                        
+                    if (is_in)
+                        std::cout<<GRN <<v;
+                    else
+                        std::cout<<RED <<v;
+                }
                 std::cout<<" ";
+            }
+            std::cout<<std::endl;
         }
         std::cout<<std::endl;
     }

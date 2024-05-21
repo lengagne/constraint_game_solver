@@ -2,6 +2,7 @@
 #define __PROBLEMSUDOKU__
 
 #include "AbstractProblem.h"
+#include "ConstraintAllInside.h"
 
 class ProblemSudoku: public AbstractProblem
 {
@@ -15,7 +16,7 @@ public:
                        unsigned int col,
                        unsigned int value);
 
-    virtual void show();
+    virtual void show(const std::vector< std::vector< int> >& value);
         
 };
 

@@ -7,7 +7,11 @@ class AbstractSolver
 {
 public:
     
+    bool get_unique_solution( const std::vector< std::vector<int> > & soluce);
+    
     void set_problem( AbstractProblem* pb);
+    
+    void solve();
     
 protected:
     AbstractProblem* pb_;

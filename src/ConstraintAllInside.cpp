@@ -16,10 +16,34 @@ ConstraintAllInside::ConstraintAllInside( const std::vector<int> & values,
     nb_ = values_.size();
 }
 
-bool ConstraintAllInside::constract(const std::vector< std::vector< int> >& input)
+bool ConstraintAllInside::constract(std::vector< std::vector< int> >& input)
 {
-
-        return false;
+    // We choose to contract only if one input has size 1
+    bool contract_done = false;
+    for (int i=0;i<nb_;i++)
+    {
+        unsigned int index = index_[i];
+        if (input[index].size() == 1)
+        {
+            // We look to contract
+            int value = input[index][0];
+            
+            for (int j=0;j<nb_;j++) if (i!= j)
+            {
+                unsigned int index2 = index_[j];
+                unsigned int s = input[index2].size();
+                for (int k=0;k<s;k++)   if (input[index2][k] == value)  
+                {
+                    input[index2].erase(input[index2].begin()+k);
+                    k--;
+                    return true;
+                }
+                    
+            }
+            
+        }
+    }
+    return false;
 }
 
 bool ConstraintAllInside::test(const std::vector< std::vector< int> >& input)

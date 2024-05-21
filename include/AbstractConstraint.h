@@ -6,7 +6,7 @@
 class AbstractConstraint
 {
 public:
-    virtual bool constract(const std::vector< std::vector< int> >& input) = 0;
+    virtual bool constract(std::vector< std::vector< int> >& input) = 0;
     
     virtual bool test(const std::vector< std::vector< int> >& input) = 0;
     

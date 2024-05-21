@@ -9,7 +9,7 @@ public:
     ConstraintAllInside( const std::vector<int> & values,
                          const std::vector<unsigned int> & index);
     
-    virtual bool constract(const std::vector< std::vector< int> >& input);
+    virtual bool constract(std::vector< std::vector< int> >& input);
     
     virtual bool test(const std::vector< std::vector< int> >& input);
     
